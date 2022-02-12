@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const Sequelize = require('sequelize')
 const cors = require('cors')
 const Op = Sequelize.Op
+const PORT = process.env.PORT || 3000;
 
 const sequelize = new Sequelize({
 	dialect: 'sqlite',
@@ -265,4 +266,4 @@ app.delete('/vshelfs/:bid/books/:cid', async (req, res) => {
   }
 })
 
-app.listen(8080)
+app.listen(PORT)
