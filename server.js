@@ -59,6 +59,10 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+app.get('/', async (req, res) => {
+  res.send('Examen TW Buciu Andrei grupa 1080 2022')
+})
+
 app.get('/sync', async (req, res) => {
   try {
     await sequelize.sync({ force: true })
