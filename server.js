@@ -96,15 +96,15 @@ app.get('/vshelfs', async (req, res) => {
         if (colSort) {
             query.order = [[colSort, ordSort]]
         }
-
+ 
 
         if (req.query.rowLimit) {
           rowLimit = req.query.rowLimit
         }
 
-        if (!isNaN(parseInt(req.query.pageNR))) {
+        if (!isNaN(parseInt(req.query.offset))) {
           query.limit = rowLimit
-          query.offset = rowLimit * parseInt(req.query.pageNR)
+          query.offset = rowLimit * parseInt(req.query.offset)
         }
         
 		    const vshelfs = await VirtualShelf.findAll(query);
