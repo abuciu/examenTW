@@ -1,9 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const PORT = process.env.PORT || 3000;
 const Sequelize = require('sequelize')
 const cors = require('cors')
 const Op = Sequelize.Op
-const PORT = process.env.PORT || 3000;
+
 
 const sequelize = new Sequelize({
 	dialect: 'sqlite',
@@ -76,10 +77,10 @@ app.get('/sync', async (req, res) => {
 
 app.get('/vshelfs', async (req, res) => {
     try {
+
         const query = {}
-        
-        const allowedFilters = ['description', 'date']
-        const filterKeys = Object.keys(req.query).filter(e => allowedFilters.indexOf(e) !== -1)
+        const colFilter = ['description', 'id']
+        const filterKeys = Object.keys(req.query).filter(e => colFilter.indexOf(e) !== -1)
         if (filterKeys.length > 0) {
         query.where = {}
             for (const key of filterKeys) {
@@ -89,24 +90,21 @@ app.get('/vshelfs', async (req, res) => {
             }
         }
 
-        const sortField = req.query.sortField
-        let sortOrder = 'ASC'
-        if (req.query.sortOrder && req.query.sortOrder === '-1') {
-        sortOrder = 'DESC'
-        }
+        const colSort = req.query.colSort
+        var ordSort = req.query.ordSort
 
-        if (sortField) {
-            query.order = [[sortField, sortOrder]]
+        if (colSort) {
+            query.order = [[colSort, ordSort]]
         }
 
 
-        if (req.query.pageSize) {
-            pageSize = parseInt(req.query.pageSize)
+        if (req.query.rowLimit) {
+          rowLimit = req.query.rowLimit
         }
 
-        if (!isNaN(parseInt(req.query.page))) {
-          query.limit = pageSize
-          query.offset = pageSize * parseInt(req.query.page)
+        if (!isNaN(parseInt(req.query.pageNR))) {
+          query.limit = rowLimit
+          query.offset = rowLimit * parseInt(req.query.pageNR)
         }
         
 		    const vshelfs = await VirtualShelf.findAll(query);
