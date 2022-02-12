@@ -93,8 +93,18 @@ app.get('/vshelfs', async (req, res) => {
         if (sortField) {
             query.order = [[sortField, sortOrder]]
         }
+
+
+        if (req.query.pageSize) {
+            pageSize = parseInt(req.query.pageSize)
+        }
+
+        if (!isNaN(parseInt(req.query.page))) {
+          query.limit = pageSize
+          query.offset = pageSize * parseInt(req.query.page)
+        }
         
-		const vshelfs = await VirtualShelf.findAll(query);
+		    const vshelfs = await VirtualShelf.findAll(query);
 		if (vshelfs.length > 0) {
 			res.status(200).json(vshelfs);
 		} else {
